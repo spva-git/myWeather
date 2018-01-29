@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import TextField from 'material-ui/TextField';
+import { cyan500 } from 'material-ui/styles/colors';
 
 const Wrapper = styled.div`
   display: flex;
@@ -8,32 +9,66 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
-  padding: 10px;
-`;
 
-const Span = styled.span`
-  font-size: 12px;
+  span {
+    font-size: 12px;
+  }
 `;
 
 const LocationBtn = styled.button`
+  position: relative;
+  padding: 0;
   font: inherit;
   background-color: white;
   border: none;
   outline: none;
   cursor: pointer;
-  text-decoration: underline;
 
-  :hover {
-    text-decoration: none;
+  ::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: all .2s ease-in-out;
+  }
+
+  :hover::after {
+    visibility: visible;
+    transform: scaleX(1);
+  }
+
+  :active {
+    color: ${cyan500};
+  }
+
+  :active::after {
+    transition: none;
+    background-color: ${cyan500};
   }
 `;
 
 const search = (props) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    props.getForecastByCity();
+  };
+
   return (
     <Wrapper>
-      <TextField hintText="City" />
+      <form onSubmit={handleSubmit}>
+        <TextField
+          hintText="City"
+          value={props.city}
+          onChange={(e) => props.textChanged(e.target.value)}
+        />
+      </form>
       <br />
-      <Span>or</Span>
+      <span>or</span>
       <LocationBtn>your current location</LocationBtn>
     </Wrapper>
   );
