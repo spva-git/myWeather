@@ -2,6 +2,7 @@
   "name": "weather",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://artrnh.github.io/weather",
   "dependencies": {
     "gh-pages": "^1.1.0",
     "material-ui": "^0.20.0",

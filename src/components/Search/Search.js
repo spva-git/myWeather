@@ -64,7 +64,7 @@ const Search = (props) => {
       </form>
       <br />
       <span>or</span>
-      <LocationBtn>your current location</LocationBtn>
+      <LocationBtn onClick={props.getForecastByCoordinates}>your current location</LocationBtn>
     </Wrapper>
   );
 }

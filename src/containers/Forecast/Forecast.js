@@ -76,7 +76,7 @@ const Temperature = styled.h1`
 
   @media (max-width: 700px) {
     font-size: 70px;
-    margin: 15px 0;
+    margin: 30px 0;
   }
 `;
 
@@ -132,7 +132,6 @@ const Weekly = styled.ul`
 
     @media (max-width: 700px) {
       font-size: 15px;
-      margin-bottom: 0;
     }
   }
 
@@ -238,7 +237,7 @@ class Forecast extends Component {
           {this.props.forecast.slice(1).map(day => (
             <li key={day.dt}>
               <h3>{this.getDay(new Date(day.dt * 1000).getDay())}</h3>
-              <i className={`wi wi-owm-${this.isDay() ? 'day' : 'night'}-${day.weather[0].id}`}></i>
+              <i className={`wi wi-owm-${day.weather[0].id}`}></i>
               <p>{`${Math.round(Object.values(day.temp).reduce((sum, current) => sum + current) / Object.values(day.temp).length)}°${this.state.tempUnit}`}</p>
             </li>
           ))}

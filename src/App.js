@@ -40,19 +40,46 @@ class App extends Component {
     }
   }
 
-  getForecastByCity = (e) => {
+  getForecastByCity = async (e) => {
     e.preventDefault();
 
-    fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?q=${this.state.city}&units=metric&cnt=8&appid=${apiKey}`)
-      .then(response => response.json())
-      .then(json => {
-        if (json.cod !== '200') {
-          this.setState({ error: { state: true, message: json.message }});
-        } else {
-          this.setState({ forecast: json.list });
-        }
-      })
-      .catch(error => this.setState({ error: { state: true }}));
+    try {
+      const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?q=${this.state.city}&units=metric&cnt=8&appid=${apiKey}`);
+      const json = await response.json();
+      if (json.cod !== '200') {
+        this.setState({ error: { state: true, message: json.message } });
+      } else {
+        this.setState({ forecast: json.list });
+      }
+    } catch (error) {
+      this.setState({ error: { state: true } });
+    }
+  }
+
+  getUserLocation = async () => {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(position => {
+        resolve({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude
+        });
+      });
+    });
+  }
+
+  getForecastByCoordinates = async () => {
+    try {
+      const coords = await this.getUserLocation();
+      const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?lat=${coords.lat}&lon=${coords.lon}&units=metric&cnt=8&appid=${apiKey}`);
+      const json = await response.json();
+      if (json.cod !== '200') {
+        this.setState({ error: { state: true } });
+      } else {
+        this.setState({ city: json.city.name, forecast: json.list });
+      }
+    } catch (error) {
+      this.setState({ error: { state: true } });
+    }
   }
 
   handleCityInput = (city) => {
@@ -60,7 +87,7 @@ class App extends Component {
   }
 
   clear = () => {
-    this.setState({ city: '', forecast: null, error: { state: false }});
+    this.setState({ city: '', forecast: null, error: { state: false } });
   }
 
   changeUnit = (currentTempUnit) => {
@@ -77,16 +104,17 @@ class App extends Component {
   render() {
     const cardContent = this.state.forecast
       ? <Forecast
-          back={this.clear}
-          forecast={this.state.forecast}
-          city={this.state.city}
-          changeUnit={this.changeUnit}
-        />
+        back={this.clear}
+        forecast={this.state.forecast}
+        city={this.state.city}
+        changeUnit={this.changeUnit}
+      />
       : <Search
-          getForecastByCity={this.getForecastByCity}
-          textChanged={this.handleCityInput}
-          city={this.state.city}
-        />;
+        getForecastByCity={this.getForecastByCity}
+        getForecastByCoordinates={this.getForecastByCoordinates}
+        textChanged={this.handleCityInput}
+        city={this.state.city}
+      />;
 
     return (
       <MuiThemeProvider>
