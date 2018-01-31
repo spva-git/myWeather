@@ -28,28 +28,31 @@ const Card = styled.div`
   }
 `;
 
-const key = 'dbb624c32c7f0d652500552c5ebbde56';
+const apiKey = 'dbb624c32c7f0d652500552c5ebbde56';
 
 class App extends Component {
   state = {
     city: '',
     forecast: null,
-    error: false,
-    errorMessage: ''
+    error: {
+      state: false,
+      message: ''
+    }
   }
 
-  getForecastByCity = (city) => {
-    fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&units=metric&cnt=8&appid=${key}`)
+  getForecastByCity = (e) => {
+    e.preventDefault();
+
+    fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?q=${this.state.city}&units=metric&cnt=8&appid=${apiKey}`)
       .then(response => response.json())
       .then(json => {
-        console.log(json);
         if (json.cod !== '200') {
-          this.setState({ error: true, errorMessage: json.message });
+          this.setState({ error: { state: true, message: json.message }});
         } else {
           this.setState({ forecast: json.list });
         }
       })
-      .catch(error => this.setState({ error: true }));
+      .catch(error => this.setState({ error: { state: true }}));
   }
 
   handleCityInput = (city) => {
@@ -57,7 +60,18 @@ class App extends Component {
   }
 
   clear = () => {
-    this.setState({ city: '', forecast: null, error: false });
+    this.setState({ city: '', forecast: null, error: { state: false }});
+  }
+
+  changeUnit = (currentTempUnit) => {
+    const updatedForecast = [...this.state.forecast];
+    updatedForecast.forEach(day => {
+      Object.keys(day.temp).forEach(key => {
+        day.temp[key] = currentTempUnit === 'F' ? 9 / 5 * day.temp[key] + 32 : 5 / 9 * (day.temp[key] - 32);
+      });
+    });
+
+    this.setState({ forecast: updatedForecast });
   }
 
   render() {
@@ -65,9 +79,11 @@ class App extends Component {
       ? <Forecast
           back={this.clear}
           forecast={this.state.forecast}
+          city={this.state.city}
+          changeUnit={this.changeUnit}
         />
       : <Search
-          getForecastByCity={() => this.getForecastByCity(this.state.city)}
+          getForecastByCity={this.getForecastByCity}
           textChanged={this.handleCityInput}
           city={this.state.city}
         />;
@@ -76,7 +92,7 @@ class App extends Component {
       <MuiThemeProvider>
         <Application>
           <Card>
-            {!this.state.error ? cardContent : <Error back={this.clear} message={this.state.errorMessage} />}
+            {!this.state.error.state ? cardContent : <Error back={this.clear} message={this.state.error.message} />}
           </Card>
         </Application>
       </MuiThemeProvider>

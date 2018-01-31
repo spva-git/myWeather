@@ -28,6 +28,7 @@ const Menu = styled.div`
 
 const City = styled.h1`
   margin: 0;
+  text-transform: capitalize;
 `;
 
 const ToggleStyles = {
@@ -40,13 +41,14 @@ const DateRow = styled.div`
   margin-left: 20px;
 `;
 
-const Date = styled.h2`
+const CurrentDate = styled.h2`
   margin: 0;
 `;
 
 const WeatherType = styled.h3`
   margin: 0;
   font-weight: normal;
+  text-transform: capitalize;
 `;
 
 const Weather = styled.div`
@@ -150,7 +152,45 @@ class Forecast extends Component {
     tempUnit: 'C'
   }
 
+  getDay = (index) => {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[index];
+  }
+
+  getDateString = (seconds) => {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const date = new Date(seconds * 1000);
+    return `${this.getDay(date.getDay())}, ${months[date.getMonth()]} ${date.getDate()} ${date.getFullYear()}`;
+  }
+
+  getCurrentTemp = (temps) => {
+    const hours = new Date(Date.now()).getHours();
+
+    if (hours >= 6 && hours < 12) {
+      return Math.round(temps.morn);
+    } else if (hours >= 12 && hours < 18) {
+      return Math.round(temps.day);
+    } else if (hours >= 18 && hours < 24) {
+      return Math.round(temps.eve);
+    } else {
+      return Math.round(temps.night);
+    }
+  }
+
+  isDay = () => {
+    const hours = new Date(Date.now()).getHours();
+    return hours >= 7 && hours <= 20 ? true : false;
+  }
+
+  changeTempUnit = () => {
+    const updatedTempUnit = this.state.tempUnit === 'C' ? 'F' : 'C';
+    this.setState({ tempUnit: updatedTempUnit });
+    this.props.changeUnit(updatedTempUnit);
+  }
+
   render() {
+    const today = this.props.forecast[0];
+
     return (
       <Wrapper>
         <Menu>
@@ -160,75 +200,48 @@ class Forecast extends Component {
               <path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z" />
             </SvgIcon>
           </IconButton>
-          <City>Moscow</City>
-          <Toggle 
-            label="Change to °F"
+          <City>{this.props.city}</City>
+          <Toggle
+            onToggle={this.changeTempUnit}
+            label={`Change to °${this.state.tempUnit === 'C' ? 'F' : 'C'}`}
             labelStyle={{ whiteSpace: 'nowrap' }}
             style={ToggleStyles}
           />
         </Menu>
         <DateRow>
-          <Date>Sunday, January 28 2018</Date>
-          <WeatherType>Light snow</WeatherType>
+          <CurrentDate>{this.getDateString(today.dt)}</CurrentDate>
+          <WeatherType>{today.weather[0].description}</WeatherType>
         </DateRow>
         <Weather>
-          <Temperature>-7°C</Temperature>
-          <i class="wi wi-owm-200"></i>
+          <Temperature>{`${this.getCurrentTemp(today.temp)}°${this.state.tempUnit}`}</Temperature>
+          <i className={`wi wi-owm-${this.isDay() ? 'day' : 'night'}-${today.weather[0].id}`}></i>
           <Daily>
             <li>
               <p>Morning</p>
-              <p>-7°C</p>
+              <p>{`${Math.round(today.temp.morn)}°${this.state.tempUnit}`}</p>
             </li>
             <li>
               <p>Day</p>
-              <p>-7°C</p>
+              <p>{`${Math.round(today.temp.day)}°${this.state.tempUnit}`}</p>
             </li>
             <li>
               <p>Evening</p>
-              <p>-7°C</p>
+              <p>{`${Math.round(today.temp.eve)}°${this.state.tempUnit}`}</p>
             </li>
             <li>
               <p>Night</p>
-              <p>-7°C</p>
+              <p>{`${Math.round(today.temp.night)}°${this.state.tempUnit}`}</p>
             </li>
           </Daily>
         </Weather>
         <Weekly>
-          <li>
-            <h3>Monday</h3>
-            <i class="wi wi-owm-200"></i>
-            <p>-7°C</p>
-          </li>
-          <li>
-            <h3>Tuesday</h3>
-            <i class="wi wi-owm-200"></i>
-            <p>-7°C</p>
-          </li>
-          <li>
-            <h3>Wednesday</h3>
-            <i class="wi wi-owm-200"></i>
-            <p>-7°C</p>
-          </li>
-          <li>
-            <h3>Thursday</h3>
-            <i class="wi wi-owm-200"></i>
-            <p>-7°C</p>
-          </li>
-          <li>
-            <h3>Friday</h3>
-            <i class="wi wi-owm-200"></i>
-            <p>-7°C</p>
-          </li>
-          <li>
-            <h3>Saturday</h3>
-            <i class="wi wi-owm-200"></i>
-            <p>-7°C</p>
-          </li>
-          <li>
-            <h3>Sunday</h3>
-            <i class="wi wi-owm-200"></i>
-            <p>-7°C</p>
-          </li>
+          {this.props.forecast.slice(1).map(day => (
+            <li key={day.dt}>
+              <h3>{this.getDay(new Date(day.dt * 1000).getDay())}</h3>
+              <i className={`wi wi-owm-${this.isDay() ? 'day' : 'night'}-${day.weather[0].id}`}></i>
+              <p>{`${Math.round(Object.values(day.temp).reduce((sum, current) => sum + current) / Object.values(day.temp).length)}°${this.state.tempUnit}`}</p>
+            </li>
+          ))}
         </Weekly>
       </Wrapper>
     );

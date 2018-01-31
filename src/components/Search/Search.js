@@ -52,15 +52,10 @@ const LocationBtn = styled.button`
   }
 `;
 
-const search = (props) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    props.getForecastByCity();
-  };
-
+const Search = (props) => {
   return (
     <Wrapper>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={props.getForecastByCity}>
         <TextField
           hintText="City"
           value={props.city}
@@ -74,4 +69,4 @@ const search = (props) => {
   );
 }
 
-export default search;
+export default Search;

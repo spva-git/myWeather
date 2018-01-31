@@ -47,7 +47,7 @@ const BackBtn = styled.button`
   }
 `;
 
-const error = (props) => (
+const Error = (props) => (
   <Wrapper>
     <p>{!props.message ? 'Oops! Something went wrong.' : props.message + '.'}</p>
     <BackBtn onClick={props.back}>Back</BackBtn>
@@ -55,4 +55,4 @@ const error = (props) => (
 );
 
 
-export default error;
+export default Error;
