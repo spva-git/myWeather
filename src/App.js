@@ -8,22 +8,25 @@ import Error from './components/Error/Error';
 
 const Application = styled.div`
   text-align: center;
+  height: 100vh;
   width: 1000px;
   margin: 0 auto;
 
   @media (max-width: 1000px) {
-    height: 100vh;
     width: 100%;
   }
 `;
 
 const Card = styled.div`
-  margin-top: 200px;
+  position: relative;
+  top: 50%;
+  margin-top: -300px;
   height: 600px;
   background-color: white;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, .25);
 
   @media (max-width: 1000px) {
+    top: 0;
     margin-top: 0;
     box-shadow: none;
   }
