@@ -12,6 +12,7 @@ const Application = styled.div`
   margin: 0 auto;
 
   @media (max-width: 1000px) {
+    height: 100vh;
     width: 100%;
   }
 `;
@@ -23,8 +24,8 @@ const Card = styled.div`
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, .25);
 
   @media (max-width: 1000px) {
-    height: 100vh;
     margin-top: 0;
+    box-shadow: none;
   }
 `;
 

@@ -18,6 +18,10 @@ injectGlobal`
     padding: 0;
     font-family: 'Roboto', sans-serif;
     background-color: ${cyan500};
+
+    @media (max-width: 1000px) {
+      background-color: white;
+    }
   }
 `;
 
