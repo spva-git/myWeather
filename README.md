@@ -10,6 +10,10 @@ Features:
 
 git clone ```git@github.com:sndp-vrma/myWeather.git```
 
+## Screenshot
+<div align="center">
+    <img src="https://i.postimg.cc/RhKr5RTv/Screenshot-from-2019-07-16-14-18-00.png"> 
+</div>
 
 ## Prerequisites
 
@@ -18,9 +22,3 @@ To install dependencies: ```yarn```
 ## Getting started
 
 To run the server locally: ```yarn start```
-
-
-## Screenshot here
-<div align="center">
-    <img src="https://i.postimg.cc/RhKr5RTv/Screenshot-from-2019-07-16-14-18-00.png"> 
-</div>
