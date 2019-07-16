@@ -6,11 +6,9 @@ Features:
 * City can be selected by name or current location can be used
 * Switch between Celsius and Fahrenheit
 
-You can try it on GitHub Pages: https://sndp-vrma.github.io/weather/
-
 ## Clone
 
-git clone git@github.com:sndp-vrma/myWeather.git
+git clone ```git@github.com:sndp-vrma/myWeather.git```
 
 
 ## Prerequisites
