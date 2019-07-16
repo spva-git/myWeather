@@ -1,0 +1,10 @@
+/*!
+ *  Weather Icons 1.0
+ *  Created July 16, 2019
+ */
+@font-face {
+  font-family: 'weathericons';
+  src: url('./Font/Weather-Time.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}

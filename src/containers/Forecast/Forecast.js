@@ -43,7 +43,42 @@ const DateRow = styled.div`
 const CurrentDate = styled.h2`
   margin: 0;
 `;
-
+const SuperSubSpan = styled.span`
+    position: absolute;
+    font-size: small;
+`;
+const Superscript = styled.span`
+    color: red; 
+    display:block; 
+    position:relative; 
+    left:2px; 
+    top: -5px
+`;
+const Subscript = styled.span`
+    color: green; 
+    display:block; 
+    position:relative; 
+    left:2px; 
+    top: -5px
+`;
+const SuperSubSpanToday = styled.span`
+    position: absolute;
+    font-size: medium;
+`;
+const SuperscriptToday = styled.span`
+    color: red; 
+    display:block; 
+    position:relative; 
+    left:2px; 
+    top: -5px
+`;
+const SubscriptToday = styled.span`
+    color: green; 
+    display:block; 
+    position:relative; 
+    left:2px; 
+    top: 105px
+`;
 const WeatherType = styled.h3`
   margin: 0;
   font-weight: normal;
@@ -188,7 +223,7 @@ class Forecast extends Component {
 
   render() {
     const today = this.props.forecast[0];
-
+    console.log('AAd',today.temp);
     return (
       <Wrapper>
         <Menu>
@@ -211,7 +246,13 @@ class Forecast extends Component {
           <WeatherType>{today.weather[0].description}</WeatherType>
         </DateRow>
         <Weather>
-          <Temperature>{`${this.getCurrentTemp(today.temp)}°${this.state.tempUnit}`}</Temperature>
+
+          <Temperature>{`${this.getCurrentTemp(today.temp)}°${this.state.tempUnit}`}
+          <SuperSubSpanToday>
+              <SuperscriptToday>{`${Math.round(today.temp.max)}°${this.state.tempUnit}`}</SuperscriptToday>
+              <SubscriptToday>{`${Math.round(today.temp.min)}°${this.state.tempUnit}`}</SubscriptToday>
+              </SuperSubSpanToday>
+            </Temperature>
           <i className={`wi wi-owm-${this.isDay() ? 'day' : 'night'}-${today.weather[0].id}`}></i>
           <Daily>
             <li>
@@ -237,7 +278,13 @@ class Forecast extends Component {
             <li key={day.dt}>
               <h3>{this.getDay(new Date(day.dt * 1000).getDay())}</h3>
               <i className={`wi wi-owm-${day.weather[0].id}`}></i>
-              <p>{`${Math.round(Object.values(day.temp).reduce((sum, current) => sum + current) / Object.values(day.temp).length)}°${this.state.tempUnit}`}</p>
+              <p>{`${Math.round(Object.values(day.temp).reduce((sum, current) => sum + current) / Object.values(day.temp).length)}
+              °${this.state.tempUnit}`}
+              <SuperSubSpan>
+              <Superscript>{`${Math.round(day.temp.max)}°${this.state.tempUnit}`}</Superscript>
+              <Subscript>{`${Math.round(day.temp.min)}°${this.state.tempUnit}`}</Subscript>
+              </SuperSubSpan>
+              </p>
             </li>
           ))}
         </Weekly>

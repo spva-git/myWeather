@@ -22,7 +22,7 @@ const Card = styled.div`
   top: 50%;
   margin-top: -300px;
   height: 600px;
-  background-color: white;
+  background-color: #F5F5F5;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, .25);
 
   @media (max-width: 1000px) {
@@ -32,7 +32,7 @@ const Card = styled.div`
   }
 `;
 
-const apiKey = 'dbb624c32c7f0d652500552c5ebbde56';
+const apiKey = '98c355d73f22c6eb33c4bc0bd22031fe';
 
 class App extends Component {
   state = {
