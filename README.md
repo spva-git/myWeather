@@ -21,4 +21,6 @@ To run the server locally: ```yarn start```
 
 
 ## Screenshot here
-[Screenshot-from-2019-07-16-14-18-00.png](https://postimg.cc/rRVZ55bH)
+<div align="center">
+    <img src="https://i.postimg.cc/RhKr5RTv/Screenshot-from-2019-07-16-14-18-00.png"> 
+</div>
